@@ -172,6 +172,14 @@ async def inject(itype: str):
     return {"injected": ev["id"], "type": itype}
 
 
+@app.post("/mcp")
+async def mcp_endpoint(payload: dict):
+    """SENTINEL's tools as MCP (see sentinel/mcp.py). Same policy path as act():
+    Pomerium-live mode proxies every call; denials surface as MCP tool errors."""
+    from . import mcp as _mcp
+    return _mcp.handle(payload, registry)
+
+
 @app.post("/toolexec/{tool}/{service}")
 async def toolexec(tool: str, service: str):
     """Upstream tool endpoint that Pomerium fronts in live mode. Defense in depth:

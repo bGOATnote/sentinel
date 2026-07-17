@@ -1,9 +1,5 @@
 # SENTINEL
 
-> Sibling build, same day, same fail-closed doctrine, zero shared code:
-> **[CONCORD](https://github.com/GOATnote-Inc/concord)** — the same gates guarding the
-> against-medical-advice conversation in healthcare (Act 2 of the demo).
-
 **An event-triggered, self-correcting ops agent.** A live event stream flows in; with zero
 human intervention SENTINEL detects incidents, plans with Claude, acts through a policy-gated
 tool registry, **verifies by re-inspecting the actual state that fired the event**, and
@@ -63,6 +59,20 @@ The engine (`loop_engine/`) is ~100 lines and domain-agnostic; SENTINEL is one a
 (`skins/ops_skin.py`) plus a simulated world. Re-skinning it to another incident domain
 (e.g. recruiting ops: failed interview-transcript deliveries → replay → verify) is a new
 skin, not a rebuild.
+
+## MCP endpoint — SENTINEL's tools for any agent, policy still in charge
+
+`POST /mcp` speaks MCP JSON-RPC (initialize / tools/list / tools/call). Every `tools/call`
+takes the SAME policy path as the agent's own act(): in Pomerium-live mode the call is
+proxied and **PPL decides** — a denied tool surfaces as an MCP tool error, never a silent
+success. This mirrors Pomerium's MCP guardrail pattern (`mcp_tool` criteria), self-hosted.
+7 TDD tests: `tests/test_mcp.py`.
+
+```bash
+curl -s -X POST localhost:8787/mcp -H 'Content-Type: application/json' -d \
+ '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"restart_service","arguments":{"service":"billing-db"}}}'
+# => {"result":{"isError":true,"content":[{"type":"text","text":"BLOCKED by Pomerium: denied by Pomerium route policy (PPL)"}]}}
+```
 
 ## Rehearse / verify the claims
 
