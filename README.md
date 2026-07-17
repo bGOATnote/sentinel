@@ -43,7 +43,7 @@ verified fix in **~10s**; the full two-incident golden path in **~68s**, hands o
 | verify() re-inspection, per-incident detect→fix timing in the audit log | real, measured |
 | The "infrastructure" (6 services) + incident timeline (5s / 60s) | simulated world, seeded |
 | Nexla feed / Zero.xyz tools / Pomerium gate | **local fallbacks** behind live↔local env flags (`SENTINEL_NEXLA/ZERO/POMERIUM`); UI labels tell the truth at all times |
-| Akash | Dockerfile + SDL prepared (`akash-deploy.yaml`); not deployed |
+| Akash | **DEPLOYED + LIVE** (Jul 17): agent + UI serving at `o9ghl02midejp3jnq08rutruoc.ingress.cpu.aesservices.net` (DSEQ 1784321934915; keyless → deterministic plans, labeled honestly; SDL in `akash-deploy.yaml`) |
 
 ## Architecture
 

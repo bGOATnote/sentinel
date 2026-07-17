@@ -1,13 +1,17 @@
 # Akash SDL for SENTINEL (agent + UI container; model = Anthropic API).
-# STATUS: prepared, NOT yet deployed — do not claim Akash on stage until this is
-# live and the public URL is in the browser bar. See DEMO.md preflight.
+# STATUS: DEPLOYED + LIVE (Jul 17, 2:03 PM PT) — DSEQ 1784321934915, provider AES Services,
+# http://o9ghl02midejp3jnq08rutruoc.ingress.cpu.aesservices.net  ($5.32/mo, trial credits)
+# Image is linux/amd64 (Akash providers are x86_64 — an arm64 build hits ImagePullBackOff).
 ---
 version: "2.0"
 services:
   sentinel:
-    image: REPLACE_WITH_PUSHED_IMAGE   # e.g. ghcr.io/<user>/sentinel:demo
+    image: ttl.sh/sentinel-bgoat-loop17:24h   # public ephemeral registry, valid 24h
     env:
-      - ANTHROPIC_API_KEY=REPLACE_AT_DEPLOY
+      # Deploy WITHOUT a key by default: SENTINEL runs with deterministic cached
+      # plans and says so in the UI. Add ANTHROPIC_API_KEY in the console env
+      # editor ONLY if we decide to put a live key on a public deployment.
+      - SENTINEL_AKASH=live
     expose:
       - port: 8787
         as: 80

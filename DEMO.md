@@ -5,10 +5,12 @@
 > 3 CONSECUTIVE clean stopwatch runs at 12:38–12:42 PM:
 > golden path 67.3s / 67.3s / 67.5s · detect→verified-fix 9.7s / 10.2s / 9.8s (live model).
 > Backup captured: docs/sentinel-golden-path.webm + screenshots (12:44 PM).
-> INTEGRATION TRUTH RIGHT NOW: model = **live claude-haiku-4-5** · Nexla/Zero.xyz/Pomerium =
-> **local fallback** (flags ready, no credentials yet) · runtime = **localhost** (Akash SDL
-> prepared, NOT deployed). Every claim below matches that; [LIVE-UPGRADE] marks the sentence
-> swap if a credential lands before freeze.
+> INTEGRATION TRUTH RIGHT NOW (updated 2:03 PM): model = **live claude-haiku-4-5** (localhost
+> demo) · Nexla/Zero.xyz/Pomerium = **local fallback** (Nexla token validated but not wired —
+> timebox verdict; flags ready) · **Akash = LIVE**: the agent + UI are deployed and serving at
+> **http://o9ghl02midejp3jnq08rutruoc.ingress.cpu.aesservices.net** (DSEQ 1784321934915,
+> keyless → deterministic plans, labeled honestly in its UI). Demo primary = localhost
+> (live model); the Akash tab is shown as proof during the roll-call.
 
 ## Setup (before slot): terminal in `hackathon/starter-kit`, browser at `localhost:8787`,
 ## backup video open in the next tab. Command ready: `SENTINEL_ENV_FILE=<env> ./demo.sh`
@@ -25,7 +27,7 @@
 | ~1:36 | **WOW 2: guardrail** | Pre-announce: "Next one it should NOT be allowed to fix." DBAlert on billing-db → ⛔ BLOCKED. "It planned a restart of a production database — the policy gate blocked it. [LIVE-UPGRADE: 'Pomerium blocked it.'] Autonomy WITH guardrails." |
 | ~1:45 | Honest escalation | NEEDS HUMAN badge. "When it can't safely fix something, it doesn't fail silently — it escalates to a human with the full evidence trail. That's our answer to 'what if it's wrong?'" |
 | 1:50–2:10 | Q&A bait | "Any of these event types can be injected ad-hoc — pick one later and watch it handled unscripted." |
-| 2:10–2:30 | **Tool roll-call (honest)** | "Architecture: the feed layer is built for **Nexla** as the data-delivery spine, tools execute behind a **Zero.xyz**-style registry, every call passes a **Pomerium**-pattern policy gate — today those run as local fallbacks with live/local flags, and the UI labels exactly what's real. The plans you watched were **live Claude** on short prompts. It's containerized with an **Akash** SDL ready. [LIVE-UPGRADE per credential: swap in 'X is live right now — the label says so.'] |
+| 2:10–2:30 | **Tool roll-call (honest)** | "The feed layer is built for **Nexla** as the data-delivery spine, tools execute behind a **Zero.xyz**-style registry, every call passes a **Pomerium**-pattern policy gate — today those run as local fallbacks with live/local flags, and the UI labels exactly what's real. The plans you watched were **live Claude** on short prompts. And — _[switch to the Akash tab, URL in the browser bar]_ — **this same agent and UI are running on Akash right now, at this URL, deployed this afternoon on trial credits.**" |
 | 2:30–2:45 | **The number** | "Measured on this machine today, three consecutive runs: detect → verified fix in **under 10 seconds** (9.7–10.2s), the full two-incident golden path in **67 seconds**, hands off. Thirty stolen minutes → ten hands-off seconds." |
 | 2:45–3:00 | Why big | "Every ops queue is a loop waiting for this: senses, hands, guardrails, audit. Same engine re-skins to any incident domain — that's the company." |
 
@@ -51,6 +53,8 @@ that's the re-skin, not a rebuild."
 2. Port: `lsof -i :8787` → kill strays.
 3. Model: `.venv/bin/python -c "from loop_engine.model import Model; print(Model().complete(system='ok',prompt='ok',max_tokens=5))"` with env sourced → any text = live OK; error → run `./demo.sh --offline`, MODEL chip must read "offline cache", strike "live Claude" from roll-call.
 4. Per live integration (only if flipped live): Nexla poll returns an event · Zero tool call round-trips · Pomerium proxy answers → else `SENTINEL_<X>=local` and strike its sentence.
-5. Akash: only claim if the browser bar shows the Akash URL serving the UI.
+5. Akash: `curl -sf http://o9ghl02midejp3jnq08rutruoc.ingress.cpu.aesservices.net/healthz`
+   → JSON = claim stands, keep the tab open; dead → STRIKE the Akash sentence, close the tab.
+   (Trial lease ~3 days; ttl.sh image expires ~1:33 PM tomorrow — outlives the demo.)
 6. Backup video open in adjacent tab; `--offline` rehearsed once this hour.
 7. Browser: full-screen, ~125% zoom, dark room check.
